@@ -20,7 +20,7 @@ def start_client():
     initial_port = random.choice(ports)
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client.connect(('localhost', initial_port))
-
+    
 
     while not nickname.strip():
         nickname = input("Enter your username: ")
@@ -31,7 +31,7 @@ def start_client():
     rooms_message = client.recv(1024).decode('utf-8')
     print(rooms_message)
     
-    room_name = input("Select chat room:")
+    room_name = input("Select a chat room:")
     client.send(room_name.encode('utf-8'))
 
     thread = threading.Thread(target=receive_messages, args=(client,))
@@ -39,14 +39,22 @@ def start_client():
     
     print("Enter '#private' to request all user nicknames for the current chat room.")
     print("Enter 'Target nickname >> Message' to send a private chat message.")
-    print("Type '#quit' to exit the chat room.")
+    print("Type '#quit' to leave the current chat room.")
+    print("Type '#exit' to exit the system.\n")
     
     while True:
         message = input('')
         if message.lower() == '#exit':
             client.send(message.encode('utf-8'))
             break
-        client.send(message.encode('utf-8'))
+        elif message.lower() == '#quit':
+            client.send(message.encode('utf-8'))
+            # rooms_message = client.recv(1024).decode('utf-8')
+            # print(rooms_message)
+
+            
+        else:
+            client.send(message.encode('utf-8'))
 
     client.close()
 

@@ -47,7 +47,14 @@ def start_client():
         if message.lower() == '#exit':
             client.send(message.encode('utf-8'))
             break
-        client.send(message.encode('utf-8'))
+        elif message.lower() == '#quit':
+            client.send(message.encode('utf-8'))
+            # rooms_message = client.recv(1024).decode('utf-8')
+            # print(rooms_message)
+
+            
+        else:
+            client.send(message.encode('utf-8'))
 
     client.close()
 
